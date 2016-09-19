@@ -115,6 +115,9 @@ void WiFiManager::setupConfigPortal() {
   server->on("/wifisave", std::bind(&WiFiManager::handleWifiSave, this));
   server->on("/i", std::bind(&WiFiManager::handleInfo, this));
   server->on("/r", std::bind(&WiFiManager::handleReset, this));
+
+  server->on("/apmode", std::bind(&WiFiManager::handleApMode, this));
+
   //server->on("/generate_204", std::bind(&WiFiManager::handle204, this));  //Android/Chrome OS captive portal check.
   server->on("/fwlink", std::bind(&WiFiManager::handleRoot, this));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
   server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
@@ -373,6 +376,13 @@ void WiFiManager::handleRoot() {
 
 }
 
+/** AP mode */
+void  WiFiManager::handleApMode(){
+	DEBUG_WM(F("AP Mode"));
+	server->send(200,"text/html","done");
+	// force to exit the loop
+	_configPortalTimeout=1;
+}
 /** Wifi config page handler */
 void WiFiManager::handleWifi(boolean scan) {
 
