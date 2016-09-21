@@ -168,7 +168,8 @@ boolean  WiFiManager::startConfigPortal(char const *apName, char const *apPasswo
   connect = false;
   setupConfigPortal();
 
-  while (_configPortalTimeout == 0 || millis() < _configPortalStart + _configPortalTimeout) {
+  while (WiFi.status() != WL_CONNECTED &&
+  	(_configPortalTimeout == 0 || millis() < _configPortalStart + _configPortalTimeout)) {
     //DNS
     dnsServer->processNextRequest();
     //HTTP
